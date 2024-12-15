@@ -1,3 +1,31 @@
+log*.html
+
+.idea
+*.xcodeproj
+.vscode
+.cache
+.zig-cache
+
+profile*
+fuzz-results
+test/fuzz/out
+test/fixtures/grammars/*
+!test/fixtures/grammars/.gitkeep
+
+package-lock.json
+node_modules
+
+docs/assets/js/tree-sitter.js
+
+/tree-sitter.pc
+
+/target
+*.wasm
+.swiftpm
+.build
+build
+zig-*
+
 # Prerequisites
 *.d
 
@@ -42,11 +70,3 @@
 *.idb
 *.pdb
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
