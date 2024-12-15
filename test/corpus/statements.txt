@@ -1,0 +1,564 @@
+================================================================================
+Type definition statements
+================================================================================
+
+lib main
+
+type abc string
+type abc xyz
+type abc xyz | abc > 10
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (type_identifier))
+  (type_statement
+    (identifier)
+    (type_identifier)
+    (infix_expression
+      (identifier)
+      (int_literal))))
+
+================================================================================
+Type alias statements
+================================================================================
+
+lib main
+
+alias abc i64
+alias abc xyz
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_alias_statement
+    (identifier)
+    (primitive_type))
+  (type_alias_statement
+    (identifier)
+    (type_identifier)))
+
+================================================================================
+Struct statements
+================================================================================
+
+lib main
+
+struct abc {
+	a string
+	b *abc
+	c i64 | c > 10
+}
+
+struct abc { i64, f64 }
+
+gen struct abc {
+	a string
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (struct_statement
+    (identifier)
+    (struct_body
+      (field_statement
+        (identifier)
+        (primitive_type))
+      (field_statement
+        (identifier)
+        (pointer_type
+          (type_identifier)))
+      (field_statement
+        (identifier)
+        (primitive_type)
+        (infix_expression
+          (identifier)
+          (int_literal)))))
+  (struct_statement
+    (identifier)
+    (struct_body
+      (field_statement
+        (primitive_type))
+      (field_statement
+        (primitive_type))))
+  (struct_statement
+    (identifier)
+    (struct_body
+      (field_statement
+        (identifier)
+        (primitive_type)))))
+
+================================================================================
+Enum statements
+================================================================================
+
+lib main
+
+enum abc {
+	a
+}
+
+enum abc {
+	a
+	b
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (enum_statement
+    (identifier)
+	(enum_body
+    	(field_statement
+            (type_identifier)))) 
+  (enum_statement
+    (identifier)
+    (enum_body
+      (field_statement
+            (type_identifier))
+          (field_statement
+            (type_identifier)))))
+
+================================================================================
+Function statements
+================================================================================
+
+lib main
+
+pub fn test() i64, string {
+	return 1, "2"
+}
+fn test() {
+	return
+}
+fn test(a, b f64)
+
+@extern(c)
+fn test()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (multi_return_type
+      (primitive_type)
+      (primitive_type))
+    (block_statement
+      (return_statement
+        (int_literal)
+        (string_literal))))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (return_statement)))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (identifier)
+        (primitive_type))))
+  (function_statement
+    (attribute_statement
+      (function_attribute))
+    (identifier)
+    (parameter_list)))
+
+================================================================================
+Assignment statements
+================================================================================
+
+lib main
+
+let x, let y = 1, 2
+
+fn main() {
+	var x = 1
+	x = 2
+	x, let y = 1, 2
+	var x, let y = test()
+    v.f = v.0
+    a[0] = b
+}
+
+--------------------------------------------------------------------------------
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier))
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (int_literal)
+      (int_literal)))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (assignment_statement
+        (decleration_list
+          (var_statement
+            (identifier)))
+        (assignable_expression_list
+          (int_literal)))
+      (assignment_statement
+        (decleration_list
+          (identifier))
+        (assignable_expression_list
+          (int_literal)))
+      (assignment_statement
+        (decleration_list
+          (identifier)
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (int_literal)
+          (int_literal)))
+      (assignment_statement
+        (decleration_list
+          (var_statement
+            (identifier))
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (call_expression
+            (identifier))))
+      (assignment_statement
+        (decleration_list
+          (dot_expression
+            (identifier)
+            (identifier)))
+        (assignable_expression_list
+          (dot_expression
+            (identifier))))
+      (assignment_statement
+        (decleration_list
+          (index_expression
+            (identifier)
+            (int_literal)))
+        (assignable_expression_list
+          (identifier))))))
+================================================================================
+For statements
+================================================================================
+
+lib main
+
+fn main() {
+	for i = 0; i < 10; i++ { }
+	for i = 0; i < 10; i = i * 2 { }
+	for x < 10 { }
+	for { }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (for_statement
+        (for_classic
+          (assignment_statement
+            (decleration_list
+              (identifier))
+            (assignable_expression_list
+              (int_literal)))
+          (infix_expression
+            (identifier)
+            (int_literal))
+          (postfix_expression
+            (identifier)))
+        (block_statement))
+      (for_statement
+        (for_classic
+          (assignment_statement
+            (decleration_list
+              (identifier))
+            (assignable_expression_list
+              (int_literal)))
+          (infix_expression
+            (identifier)
+            (int_literal))
+        (assignment_statement
+              (decleration_list
+                (identifier))
+              (assignable_expression_list
+                (infix_expression
+                  (identifier)
+                  (int_literal)))))
+        (block_statement))
+      (for_statement
+        (infix_expression
+          (identifier)
+          (int_literal))
+		(block_statement))
+      (for_statement
+        (block_statement)))))
+
+
+================================================================================
+Keyword statements
+================================================================================
+
+lib main 
+
+fn main() {
+	for {
+		if x {
+			break
+		} else {
+			next
+		}
+	}
+}
+--------------------------------------------------------------------------------
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (for_statement
+        (block_statement
+          (if_statement
+            (identifier)
+            (block_statement
+              (break_keyword))
+            (block_statement
+              (next_keyword))))))))
+
+================================================================================
+If statements
+================================================================================
+
+lib main
+
+fn main() {
+	if x {
+		return	
+	}
+
+	if x {
+		return
+	} else {
+		return
+	}
+
+	if x {
+		return
+	} else if y {
+		return 
+	} else {
+		return
+	}
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (if_statement
+        (identifier)
+        (block_statement
+          (return_statement)))
+      (if_statement
+        (identifier)
+        (block_statement
+          (return_statement))
+        (block_statement
+          (return_statement)))
+      (if_statement
+        (identifier)
+        (block_statement
+          (return_statement))
+        (if_statement
+          (identifier)
+          (block_statement
+            (return_statement))
+          (block_statement
+            (return_statement)))))))
+
+================================================================================
+Match statements
+================================================================================
+
+lib main
+
+fn main() {
+	match x {
+	case 1: 0 
+	case _: b()
+	}
+
+	match c() {
+	case 1: 
+		return
+	}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (match_statement
+        (identifier)
+        (match_statement_case
+          (int_literal)
+          (expression_statement
+              (int_literal)))
+        (match_statement_default
+            (expression_statement
+              (call_expression
+                (identifier)))))
+      (match_statement
+        (call_expression
+          (identifier))
+        (match_statement_case
+          (int_literal)
+            (return_statement))))))
+
+================================================================================
+Block statements
+================================================================================
+
+lib main
+
+fn main() {
+	{
+		var x = 1
+	}
+
+	{
+		a()
+		return
+	}
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (block_statement
+        (assignment_statement
+          (decleration_list
+            (var_statement
+              (identifier)))
+          (assignable_expression_list
+            (int_literal))))
+      (block_statement
+        (expression_statement
+          (call_expression
+            (identifier)))
+        (return_statement)))))
+
+================================================================================
+Defer statements
+================================================================================
+
+lib main
+
+fn main() {
+  defer call()
+  defer { call() }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (defer_statement
+        (call_expression
+          (identifier)))
+      (defer_statement
+        (block_statement
+          (expression_statement
+            (call_expression
+              (identifier))))))))
+
+================================================================================
+Nested statements
+================================================================================
+
+lib main
+
+fn main() {
+	for {
+		match x {
+		case 1:
+			if xyz {
+				return
+			}
+		case _: {
+			next
+		}}
+	}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (for_statement
+        (block_statement
+          (match_statement
+            (identifier)
+            (match_statement_case
+              (int_literal)
+                (if_statement
+                  (identifier)
+                  (block_statement
+                    (return_statement))))
+            (match_statement_default
+              (block_statement
+                (next_keyword)))))))))
+

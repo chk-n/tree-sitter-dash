@@ -1,0 +1,10 @@
+lib main
+
+make([]i64, 10)
+//<-function.builtin
+len(arr)
+//<-function.builtin
+cap(xyz)
+//<-function.builtin
+size(1)
+//<-function.builtin

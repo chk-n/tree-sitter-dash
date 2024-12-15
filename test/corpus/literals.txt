@@ -1,0 +1,328 @@
+================================================================================
+Int literals
+================================================================================
+
+lib main
+
+let i1 = 1
+let i2 = 1_000
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (int_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (int_literal))))
+
+================================================================================
+Float literals
+================================================================================
+
+lib main
+
+let f1 = 4.0
+let f2 = 0.01
+let f3 = 4_0.1
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (float_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (float_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (float_literal))))
+          	
+================================================================================
+Char literals
+================================================================================
+
+lib main
+
+let c1 = 'a'
+let c2 = '2'
+let c3 = '\\'
+let c4 = '-'
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal))))
+
+================================================================================
+String literals
+================================================================================
+
+lib main
+
+let s1 = ""
+let s2 = "1"
+let s3 = "a1*'"
+let s4 = "valid
+"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (string_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (string_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (string_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (string_literal))))
+
+================================================================================
+Array literals
+================================================================================
+
+lib main
+
+let a1 = []
+let a2 = ["1","h"]
+let a3 = [
+	1,
+	2,
+]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (array_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (array_literal
+        (string_literal)
+        (string_literal))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (array_literal
+        (int_literal)
+        (int_literal)))))
+
+================================================================================
+Struct literals
+================================================================================
+
+lib main
+
+let s1 = abc{f1: 2, f2: 3}
+let s2 = abc{
+  f1: 3.4, 
+}
+let s3 = abc{}
+let s4 = abc{"1","2"}
+let s5 = {a: "h"}
+let s6 = {3.1, 2.3}
+let s7 = {}
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (type_identifier)
+        (struct_named_field
+          (identifier)
+          (int_literal))
+        (struct_named_field
+          (identifier)
+          (int_literal)))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+      (type_identifier)
+            (struct_named_field
+              (identifier)
+              (float_literal)))))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (struct_literal
+        (type_identifier))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (type_identifier)
+        (struct_unnamed_field
+          (string_literal))
+        (struct_unnamed_field
+          (string_literal)))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (struct_named_field
+          (identifier)
+          (string_literal)))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (struct_unnamed_field
+          (float_literal))
+        (struct_unnamed_field
+          (float_literal)))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal))))
+
+================================================================================
+Function literals
+================================================================================
+
+lib main
+
+let fn1 = fn() {}
+let fn2 = fn(x i64) i64 { 
+  return 0
+}
+let fn3 = fn(x, y i64) i64, i64 { 
+  return 1, 2
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (function_literal
+        (parameter_list)
+        (block_statement))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (function_literal
+        (parameter_list
+          (parameter
+            (identifier)
+            (primitive_type)))
+        (primitive_type)
+        (block_statement
+          (return_statement
+            (int_literal))))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (function_literal
+        (parameter_list
+          (parameter
+            (identifier)
+            (identifier)
+            (primitive_type)))
+        (multi_return_type
+          (primitive_type)
+          (primitive_type))
+        (block_statement
+          (return_statement
+            (int_literal)
+            (int_literal)))))))

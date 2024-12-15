@@ -1,0 +1,211 @@
+================================================================================
+Scalar types
+================================================================================
+
+lib main
+
+type a u8
+type a u16
+type a u32
+type a u64
+type a u128
+
+type a i8
+type a i16
+type a i32
+type a i64
+type a i128
+
+type a f32
+type a f64
+
+type a bool
+
+type a byte
+
+type a string
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type))
+      (type_statement
+        (identifier)
+        (primitive_type))
+  (type_statement
+    (identifier)
+    (primitive_type)))
+
+================================================================================
+Array types
+================================================================================
+
+lib main
+
+type a [4]i64
+type a [get()]string
+type a [][][]i64
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (array_type
+      (int_literal)
+      (primitive_type)))
+  (type_statement
+    (identifier)
+    (array_type
+	  (call_expression
+        (identifier))
+      (primitive_type)))
+  (type_statement
+    (identifier)
+    (array_type
+      (array_type
+        (array_type
+          (primitive_type))))))
+
+================================================================================
+Named types
+================================================================================
+
+lib main
+
+type a xyz
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (type_identifier)))
+
+================================================================================
+Optional types
+================================================================================
+
+lib main
+
+type a ?i64
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (optional_type
+      (primitive_type))))
+
+
+================================================================================
+Pointer types
+================================================================================
+
+lib main
+
+type a *string
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (pointer_type
+      (primitive_type))))
+      
+================================================================================
+Function types
+================================================================================
+
+lib main
+
+type a fn(string) i64, abc
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (function_type
+      (type_parameter_list
+        (primitive_type))
+      (multi_return_type
+        (primitive_type)
+        (type_identifier)))))
+
+================================================================================
+Union types
+================================================================================
+
+lib main
+
+union abc {
+  i64
+  xyz
+  []array
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (union_statement
+    (identifier)
+    (union_body
+      (primitive_type)
+      (type_identifier)
+      (array_type
+        (type_identifier)))))

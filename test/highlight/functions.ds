@@ -1,0 +1,8 @@
+lib main
+
+fn test() {}
+// ^function
+
+test()
+//<-function
+

@@ -1,0 +1,35 @@
+{
+  "grammars": [
+    {
+      "name": "dash",
+      "camelcase": "Dash",
+      "scope": "source.dash",
+      "path": ".",
+      "file-types": ["ds"],
+      "injection-regex": "^dash$",
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "None",
+    "description": "Tree sitter grammar for the Dash programming language",
+    "authors": [
+      {
+        "name": "Henrik Nordgren",
+        "email": "me@chkn.ch"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/chk-n/dash"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": false,
+    "node": false,
+    "python": false,
+    "rust": false,
+    "swift": false
+  }
+}

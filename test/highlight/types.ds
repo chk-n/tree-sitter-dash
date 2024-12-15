@@ -1,0 +1,26 @@
+lib main
+
+type a u8
+//     ^type.builtin
+
+type a []i64
+//       ^type.builtin
+
+type a *string
+//      ^type.builtin
+
+type a ?i64
+//      ^type.builtin
+
+type a fn(byte) char,bool
+//     ^keyword.function
+//        ^type.builtin
+//              ^type.builtin
+//                   ^type.builtin
+
+type a memory<i64>
+//     ^type.builtin
+
+let x = abc{}
+//      ^type
+

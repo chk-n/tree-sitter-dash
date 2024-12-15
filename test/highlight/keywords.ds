@@ -1,0 +1,56 @@
+lib main
+//<-keyword.control.import
+
+type abc i64
+//<-keyword
+alias abc i64
+//<-keyword
+
+struct abc {}
+//<-keyword.storage.type
+gen struct xyz {}
+//<-keyword.storage.type
+
+enum abc {}
+//<-keyword.storage.type
+
+union abc {}
+//<-keyword.storage.type
+
+let x = 1
+//<-keyword.storage.type
+var y = 2
+//<-keyword.storage.type
+
+pub fn main() {
+//<-keyword
+//  ^keyword.function
+
+    for { }
+//  ^'keyword.control.repeat
+
+    if true { 
+//  ^keyword.control.conditional
+    } else if false { 
+//    ^keyword.control.conditional    
+    } else { 
+//    ^keyword.control.conditional    
+    }
+
+    match x { case 1: 2 }
+//  ^keyword.control.conditional
+//            ^keyword.control.conditional
+
+    break
+//  ^keyword.control.return
+    next.control.return
+//  ^keyword.control.return
+    defer xyz()
+//  ^function.macro
+    return
+//  ^keyword.control.return
+    
+}
+
+let x = use y {}
+//      ^keyword
