@@ -100,8 +100,9 @@ module.exports = grammar({
 
     function_type: $ => prec.right(1,seq(
       'fn',
-      field("parameters", $.type_parameter_list),
-      field("result", optional($._function_return_type))
+      field('parameters', $.type_parameter_list),
+      field('error_prone', optional($.error_prone)),
+      field('result', optional($._function_return_type))
     )),
 
     memory_type: $ => seq(
@@ -185,6 +186,8 @@ module.exports = grammar({
       seq($._expression, '++'),
       seq($._expression, '--'),
     )),
+
+    error_prone: $ => token.immediate('!'),
 
     infix_expression: $ => choice(
       ...[
@@ -521,6 +524,7 @@ module.exports = grammar({
       'fn',
       field('name', $.identifier),
       field('parameters', $.parameter_list),
+      field('error_prone', optional($.error_prone)),
       field('result', optional($._function_return_type)),
       field('body', optional($.block_statement)),
     )),

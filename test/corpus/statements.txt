@@ -142,7 +142,7 @@ lib main
 pub fn test() i64, string {
 	return 1, "2"
 }
-fn test() {
+fn test()! {
 	return
 }
 
@@ -171,6 +171,7 @@ fn test()
   (function_statement
     (identifier)
     (parameter_list)
+    (error_prone)
     (block_statement
       (return_statement)))
   (function_statement
@@ -570,3 +571,4 @@ fn main() {
             (match_statement_default
               (block_statement
                 (next_keyword)))))))))
+
