@@ -145,6 +145,9 @@ pub fn test() i64, string {
 fn test() {
 	return
 }
+
+fn test() lib.typ
+
 fn test(a, b f64)
 
 @extern(c)
@@ -170,6 +173,12 @@ fn test()
     (parameter_list)
     (block_statement
       (return_statement)))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (dot_type
+      (identifier)
+      (type_identifier)))
   (function_statement
     (identifier)
     (parameter_list
@@ -561,4 +570,3 @@ fn main() {
             (match_statement_default
               (block_statement
                 (next_keyword)))))))))
-

@@ -68,7 +68,8 @@ module.exports = grammar({
       $.optional_type,
       $.function_type,
       $.memory_type,
-      $._type_identifier
+      $._type_identifier,
+      $.dot_type
     ),
 
     primitive_type: $ => choice(
@@ -119,6 +120,12 @@ module.exports = grammar({
        prec.right(1, seq(
           $._type,
           repeat1(seq(',', $._type))
+    )),
+
+    dot_type: $ => prec(PREC.primary, seq(
+      field('left', $.identifier),
+      '.',
+      field('right', $._type_identifier)
     )),
 
     // ----------- //
