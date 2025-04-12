@@ -138,6 +138,7 @@ module.exports = grammar({
       $.int_literal,
       $.float_literal,
       $.string_literal,
+      $.multi_string_literal,
       $.char_literal,
       $.true,
       $.false,
@@ -342,6 +343,10 @@ module.exports = grammar({
         /\\[\\]/
       ),
       "'"
+    multi_string_literal: $ => token(seq(
+      '`',
+      repeat(/[^`]/),
+      '`'
     )),
     
     function_literal: $ => prec.right(1, seq(
@@ -663,4 +668,3 @@ module.exports = grammar({
 function sepBy(sep, rule) {
   return optional(seq(rule, repeat(seq(sep, rule))));
 }
-
