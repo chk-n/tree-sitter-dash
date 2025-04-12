@@ -336,19 +336,25 @@ module.exports = grammar({
     int_literal: $ => token(int_literal),
     float_literal: $ => token(float_literal),
     string_literal: $ => /"[^"]*"/,
-    char_literal: $ => token(seq(
-      "'",
-      choice(
-        /[^'\\]/,
-        /\\[\\]/
-      ),
-      "'"
     multi_string_literal: $ => token(seq(
       '`',
       repeat(/[^`]/),
       '`'
     )),
     
+    char_literal: $ => token(choice(
+      // Simple characters
+      seq("'", /[^'\\]/, "'"),
+  
+      // Escaped characters
+      seq("'", '\\', /[abtnr'"]/, "'"),
+      seq("'", '\\', '\\', "'"),
+  
+      // Unicode characters
+      seq("'", '\\u', /[0-9a-fA-F]{2}/, "'"),
+      seq("'", '\\u', /[0-9a-fA-F]{4}/, "'"),
+      seq("'", '\\u', /[0-9a-fA-F]{8}/, "'")
+    )),
     function_literal: $ => prec.right(1, seq(
       'fn',
       field('parameters', $.parameter_list),

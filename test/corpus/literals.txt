@@ -67,11 +67,53 @@ let c1 = 'a'
 let c2 = '2'
 let c3 = '\\'
 let c4 = '-'
+let c5 = '\n'
+let c6 = '\t'
+let c7 = '\''
+let c8 = '\u00'
+let c9 = '\uABCD'
+let c10 = '\u00000000'
 --------------------------------------------------------------------------------
 
 (source_file
   (library_statement
     (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (char_literal)))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (char_literal)))
   (assignment_statement
     (decleration_list
       (let_statement
@@ -96,48 +138,6 @@ let c4 = '-'
         (identifier)))
     (assignable_expression_list
       (char_literal))))
-
-================================================================================
-String literals
-================================================================================
-
-lib main
-
-let s1 = ""
-let s2 = "1"
-let s3 = "a1*'"
-let s4 = "valid
-"
-
---------------------------------------------------------------------------------
-
-(source_file
-  (library_statement
-    (identifier))
-  (assignment_statement
-    (decleration_list
-      (let_statement
-        (identifier)))
-    (assignable_expression_list
-      (string_literal)))
-  (assignment_statement
-    (decleration_list
-      (let_statement
-        (identifier)))
-    (assignable_expression_list
-      (string_literal)))
-  (assignment_statement
-    (decleration_list
-      (let_statement
-        (identifier)))
-    (assignable_expression_list
-      (string_literal)))
-  (assignment_statement
-    (decleration_list
-      (let_statement
-        (identifier)))
-    (assignable_expression_list
-      (string_literal))))
 
 ================================================================================
 Array literals
