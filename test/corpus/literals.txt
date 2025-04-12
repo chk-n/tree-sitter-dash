@@ -140,6 +140,55 @@ let c10 = '\u00000000'
       (char_literal))))
 
 ================================================================================
+String literals
+================================================================================
+
+lib main
+
+let s1 = ""
+let s2 = "1"
+let s3 = "a1*'"
+let s4 = "invalid
+"
+let s5 = `multi
+line`
+
+--------------------------------------------------------------------------------
+
+(source_file
+      (library_statement
+        (identifier))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (string_literal)))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (string_literal)))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (string_literal)))
+      (ERROR
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (UNEXPECTED '\n'))
+      (assignment_statement
+        (decleration_list
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (multi_string_literal))))
+
+================================================================================
 Array literals
 ================================================================================
 
