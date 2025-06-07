@@ -128,6 +128,7 @@
 
 [
   (string_literal)
+  (multi_string_literal)
   (char_literal)
 ] @string
 
