@@ -422,6 +422,9 @@ module.exports = grammar({
       $.match_statement,
       $.block_statement,
       $.defer_statement,
+      $.try_statement,
+      $.catch_statement,
+      $.raise_statement,
       $.next_keyword,
       $.break_keyword,
     ),
@@ -527,6 +530,39 @@ module.exports = grammar({
     defer_statement: $ => seq(
       'defer',
       choice($.call_expression, $.block_statement)
+    ),
+
+    try_statement: $ => seq(
+      'try',
+      field("expression", $._expression)
+    ),
+
+    catch_statement: $ => seq(
+      field("expression", $._expression),
+      'catch',
+      '{',
+      repeat($.catch_case),
+      optional($.catch_default),
+      '}'
+    ),
+
+    catch_case: $ => seq(
+      'case',
+      field("condition", $._expression),
+      ':',
+      optional(field("body", repeat($._statement)))
+    ),
+
+    catch_default: $ => seq(
+      'case',
+      '_',
+      ':',
+      optional(field("body", repeat($._statement)))
+    ),
+
+    raise_statement: $ => seq(
+      'raise',
+      field("expression", $._expression)
     ),
     attribute_statement: $ => choice(
       $.function_attribute,
@@ -677,4 +713,3 @@ module.exports = grammar({
 function sepBy(sep, rule) {
   return optional(seq(rule, repeat(seq(sep, rule))));
 }
-

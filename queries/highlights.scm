@@ -96,6 +96,9 @@
 
 [
   "defer"
+  "try"
+  "catch" 
+  "raise"
   ; "goto"
 ] @function.macro
 

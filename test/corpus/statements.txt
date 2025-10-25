@@ -572,3 +572,80 @@ fn main() {
               (block_statement
                 (next_keyword)))))))))
 
+================================================================================
+Try statements
+================================================================================
+
+lib main
+
+fn main() {
+  try call()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (try_statement
+        (call_expression
+          (identifier))))))
+
+================================================================================
+Catch statements
+================================================================================
+
+lib main
+
+fn main() {
+  call() catch {
+    case error: return
+    case _: next
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (catch_statement
+        (call_expression
+          (identifier))
+        (catch_case
+          (identifier)
+          (return_statement))
+        (catch_default
+          (next_keyword))))))
+
+================================================================================
+Raise statements
+================================================================================
+
+lib main
+
+fn main() {
+  raise error
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (raise_statement
+        (identifier)))))
+
+(source_file
