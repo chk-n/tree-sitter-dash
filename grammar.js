@@ -148,8 +148,6 @@ module.exports = grammar({
       $.prefix_expression,
       $.infix_expression,
       $.postfix_expression,
-      $.index_expression,
-      $.slice_expression,
       $.dot_expression,
       $.use_expression,
       $.copy_expression,
@@ -293,31 +291,6 @@ module.exports = grammar({
       ')'
     ),
 
-    index_expression: $ =>  prec(PREC.primary,seq(
-      field('operand', $._expression),
-      '[',
-      field('index', $._expression),
-      ']'
-    )),
-
-    slice_expression: $ =>  prec(PREC.primary, seq(
-      field('operand', $._expression),
-      '[',
-      choice(
-        seq(
-          optional(field('start', $._expression)),
-          ':',
-          field('end', $._expression),
-        ),     
-        seq(
-          field('start', $._expression),
-          ':',
-          optional(field('end', $._expression)),
-        )
-      ),
-      ']'
-    )),
-
     dot_expression: $ => prec(PREC.primary, seq(
       field('operand', $._expression),
       '.',
@@ -443,16 +416,12 @@ module.exports = grammar({
          $.var_statement,
          $.identifier,
          $.dot_expression,
-         $.index_expression,
-         $.slice_expression,
        ),
       optional(seq(',',  choice(
          $.let_statement,
          $.var_statement,
          $.identifier,
          $.dot_expression,
-         $.index_expression,
-         $.slice_expression,
       ))),
     )),
 

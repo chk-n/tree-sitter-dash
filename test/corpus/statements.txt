@@ -207,7 +207,6 @@ fn main() {
 	x, let y = 1, 2
 	var x, let y = test()
     v.f = v.0
-    a[0] = b
 }
 
 --------------------------------------------------------------------------------
@@ -262,14 +261,7 @@ fn main() {
             (identifier)))
         (assignable_expression_list
           (dot_expression
-            (identifier))))
-      (assignment_statement
-        (decleration_list
-          (index_expression
-            (identifier)
-            (int_literal)))
-        (assignable_expression_list
-          (identifier))))))
+            (identifier)))))))
 ================================================================================
 For statements
 ================================================================================
