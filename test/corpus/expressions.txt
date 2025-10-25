@@ -520,3 +520,51 @@ let a = make([]byte, 128)
           (array_type
             (primitive_type))
           (int_literal))))))
+
+
+================================================================================
+Generic function calls - single type argument
+================================================================================
+
+lib main
+
+let gfc = call[u64]()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (call_expression
+        (identifier)
+        (type_arguments
+          (primitive_type))))))
+
+================================================================================
+Generic function calls - multiple type arguments
+================================================================================
+
+lib main
+
+let gfc = call[u64, i32]()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (call_expression
+        (identifier)
+        (type_arguments
+          (primitive_type)
+          (primitive_type))))))

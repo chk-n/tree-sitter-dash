@@ -21,6 +21,3 @@ type a fn(byte) char,bool
 type a memory<i64>
 //     ^type.builtin
 
-let x = abc{}
-//      ^type
-

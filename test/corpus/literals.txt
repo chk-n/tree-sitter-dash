@@ -255,7 +255,7 @@ let s7 = {}
         (identifier)))
     (assignable_expression_list
       (struct_literal
-        (type_identifier)
+        (identifier)
         (struct_named_field
           (identifier)
           (int_literal))
@@ -268,7 +268,7 @@ let s7 = {}
         (identifier)))
     (assignable_expression_list
       (struct_literal
-      (type_identifier)
+      (identifier)
             (struct_named_field
               (identifier)
               (float_literal)))))
@@ -278,14 +278,14 @@ let s7 = {}
             (identifier)))
         (assignable_expression_list
           (struct_literal
-        (type_identifier))))
+        (identifier))))
   (assignment_statement
     (decleration_list
       (let_statement
         (identifier)))
     (assignable_expression_list
       (struct_literal
-        (type_identifier)
+        (identifier)
         (struct_unnamed_field
           (string_literal))
         (struct_unnamed_field
@@ -315,6 +315,53 @@ let s7 = {}
         (identifier)))
     (assignable_expression_list
       (struct_literal))))
+
+================================================================================
+Generic struct literals - single type argument
+================================================================================
+
+lib main
+
+let gsl = abc[u64]{}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (identifier)
+        (type_arguments
+          (primitive_type))))))
+
+================================================================================
+Generic struct literals - multiple type arguments
+================================================================================
+
+lib main
+
+let gsl = abc[u64, i32]{}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (identifier)
+        (type_arguments
+          (primitive_type)
+          (primitive_type))))))
 
 ================================================================================
 Function literals

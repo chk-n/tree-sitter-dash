@@ -270,15 +270,16 @@ module.exports = grammar({
       seq(
         field("name", alias('make', $.identifier)),
         field("arguments",$.special_argument_list)
-      ),      
+      ),
       seq(
-      field("name", $.identifier),
-      '(',
-      optional(
-        field("arguments",seq(
-        sepBy(',', $._expression),
-        optional(',')
-      ))),
+        field("name", $.identifier),
+        field("type_arguments", optional($.type_arguments)),
+        '(',
+        optional(
+          field("arguments",seq(
+          sepBy(',', $._expression),
+          optional(',')
+        ))),
       ')'
     ))),
     special_argument_list: $ => seq(
@@ -342,14 +343,27 @@ module.exports = grammar({
       $._struct_literal,
       $._struct_anonymous_literal,
     )),
-    _struct_literal: $ =>  seq(
-      field("name", $._type_identifier),
-      token.immediate('{'),
-      choice(
-        seq(sepBy(',', $.struct_named_field), optional(',')),
-        seq(sepBy(',', $.struct_unnamed_field), optional(','))
+    
+    _struct_literal: $ => choice(
+      seq(
+        field("name", $.identifier),
+        token.immediate('{'),
+        choice(
+          seq(sepBy(',', $.struct_named_field), optional(',')),
+          seq(sepBy(',', $.struct_unnamed_field), optional(','))
+        ),
+        '}',
       ),
-      '}'
+      seq(
+        field("name", $.identifier),
+        field("type_arguments", $.type_arguments),
+        token.immediate('{'),
+        choice(
+          seq(sepBy(',', $.struct_named_field), optional(',')),
+          seq(sepBy(',', $.struct_unnamed_field), optional(','))
+        ),
+        '}',
+      )
     ),
     // NOTE: the precedence here is definitely too high
     // as tests pass i will leave as is. This will for
@@ -533,15 +547,17 @@ module.exports = grammar({
       'raise',
       field("expression", $._expression)
     ),
+
     attribute_statement: $ => choice(
       $.function_attribute,
     ),
 
     function_statement: $ => prec.right(1, seq(
-      repeat($.attribute_statement), 
+      repeat($.attribute_statement),
       optional('pub'),
       'fn',
       field('name', $.identifier),
+      field('type_parameters', optional($.type_parameters)),
       field('parameters', $.parameter_list),
       field('error_prone', optional($.error_prone)),
       field('result', optional($._function_return_type)),
@@ -558,6 +574,7 @@ module.exports = grammar({
       optional('gen'),
       'struct',
       field("name",$.identifier),
+      field("type_parameters", optional($.type_parameters)),
       field("body", $.struct_body),
      ),
 
@@ -634,6 +651,26 @@ module.exports = grammar({
     // Helpers //
     // ------- //
     
+    // Generic type parameters for definitions: [T any], [T, E any], [T xyz, E any]
+    type_parameters: $ => seq(
+      '[',
+      sepBy1(',', $.type_parameter_group),
+      ']'
+    ),
+
+    type_parameter_group: $ => seq(
+      sepBy1(',', field("name", $.identifier)),
+      field("constraint", $.identifier)
+    ),
+
+    // Generic type arguments for usage: [u64], [u64, i32]
+    type_arguments: $ => seq(
+      token.immediate('['),
+      sepBy1(',', $._type),
+      optional(','),
+      ']'
+    ),
+
     type_parameter_list: $ => seq(
       '(',
       optional(seq(
@@ -682,3 +719,11 @@ module.exports = grammar({
 function sepBy(sep, rule) {
   return optional(seq(rule, repeat(seq(sep, rule))));
 }
+
+/**
+ * Creates a rule to match one or more instances of rule separated by sep
+ */
+function sepBy1(sep, rule) {
+  return seq(rule, repeat(seq(sep, rule)));
+}
+

@@ -640,4 +640,160 @@ fn main() {
       (raise_statement
         (identifier)))))
 
+================================================================================
+Generic struct statements - single type parameter
+================================================================================
+
+lib main
+
+struct abc[T any] {
+	value T
+}
+
+--------------------------------------------------------------------------------
+
 (source_file
+  (library_statement
+    (identifier))
+  (struct_statement
+    (identifier)
+    (type_parameters
+      (type_parameter_group
+        (identifier)
+        (identifier)))
+    (struct_body
+      (field_statement
+        (identifier)
+        (type_identifier)))))
+
+================================================================================
+Generic struct statements - multiple type parameters same constraint
+================================================================================
+
+lib main
+
+struct abc[T, E any] {
+	value T
+	error E
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (struct_statement
+    (identifier)
+    (type_parameters
+      (type_parameter_group
+        (identifier)
+        (identifier)
+        (identifier)))
+    (struct_body
+      (field_statement
+        (identifier)
+        (type_identifier))
+      (field_statement
+        (identifier)
+        (type_identifier)))))
+
+================================================================================
+Generic struct statements - multiple type parameters different constraints
+================================================================================
+
+lib main
+
+struct abc[T xyz, E any] {
+	value T
+	error E
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (struct_statement
+    (identifier)
+    (type_parameters
+      (type_parameter_group
+        (identifier)
+        (identifier))
+      (type_parameter_group
+        (identifier)
+        (identifier)))
+    (struct_body
+      (field_statement
+        (identifier)
+        (type_identifier))
+      (field_statement
+        (identifier)
+        (type_identifier)))))
+
+================================================================================
+Generic function statements - single type parameter
+================================================================================
+
+lib main
+
+fn test[T any](value T) T {
+	return value
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (type_parameters
+      (type_parameter_group
+        (identifier)
+        (identifier)))
+    (parameter_list
+      (parameter
+        (identifier)
+        (type_identifier)))
+    (type_identifier)
+    (block_statement
+      (return_statement
+        (identifier)))))
+
+================================================================================
+Generic function statements - multiple type parameters
+================================================================================
+
+lib main
+
+fn test[T, E any](value T, err E) T, E {
+	return value, err
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (type_parameters
+      (type_parameter_group
+        (identifier)
+        (identifier)
+        (identifier)))
+    (parameter_list
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier)))
+    (multi_return_type
+      (type_identifier)
+      (type_identifier))
+    (block_statement
+      (return_statement
+        (identifier)
+        (identifier)))))
+
