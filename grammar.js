@@ -34,6 +34,13 @@ module.exports = grammar({
 
   word: $ => $.identifier,
 
+  conflicts: $ => [
+    // needed to disambiguate adjecent body less functions
+    // as token after `)` is `fn`, which requires one look
+    // ahead to determine if its new fn or type
+    [$.function_statement],
+  ],
+
   rules: {
     source_file: $ => seq(
       // NOTE: consider allowing partial statements and expressions
@@ -65,6 +72,7 @@ module.exports = grammar({
       $.primitive_type,
       $.array_type,
       $.pointer_type,
+      $.borrowed_type,
       $.optional_type,
       $.function_type,
       $.memory_type,
@@ -90,8 +98,16 @@ module.exports = grammar({
       )
     ),
 
-    pointer_type: $ => prec(PREC.prefix, 
+    pointer_type: $ => prec(PREC.prefix,
       seq('*', $._type)
+    ),
+
+    // TODO: borrowing (like optionals) is a use-site capability, only valid
+    // in struct fields and fn args, not type definitions. `type a &T` (and
+    // `type a ?T`) should be illegal but currently parse since `_type` allows
+    // it everywhere. 
+    borrowed_type: $ => prec(PREC.prefix,
+      seq('&', $._type)
     ),
 
     optional_type: $ => prec(PREC.prefix,
@@ -552,7 +568,7 @@ module.exports = grammar({
       $.function_attribute,
     ),
 
-    function_statement: $ => prec.right(1, seq(
+    function_statement: $ => seq(
       repeat($.attribute_statement),
       optional('pub'),
       'fn',
@@ -562,7 +578,7 @@ module.exports = grammar({
       field('error_prone', optional($.error_prone)),
       field('result', optional($._function_return_type)),
       field('body', optional($.block_statement)),
-    )),
+    ),
 
     function_attribute: $ => choice(
       seq('@extern', '(', 'c', ')'),
@@ -690,6 +706,7 @@ module.exports = grammar({
     ),
 
     parameter: $ => seq(
+      field("mutable", optional(alias('var', $.var_modifier))),
       field("name", $.identifier),
       optional(seq(',', $.identifier)),
       field("type",$._type)

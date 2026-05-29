@@ -194,6 +194,88 @@ fn test()
     (parameter_list)))
 
 ================================================================================
+Adjacent body-less function statements
+================================================================================
+
+lib main
+
+fn a(x i64)
+fn b(y i64)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (primitive_type))))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (primitive_type)))))
+
+================================================================================
+Var and borrowed parameters
+================================================================================
+
+lib main
+
+fn test(var a T) {
+	return
+}
+
+fn test2(x &T) {
+	return
+}
+
+fn test3(var x &T, y i64) {
+	return
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (var_modifier)
+        (identifier)
+        (type_identifier)))
+    (block_statement
+      (return_statement)))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (identifier)
+        (borrowed_type
+          (type_identifier))))
+    (block_statement
+      (return_statement)))
+  (function_statement
+    (identifier)
+    (parameter_list
+      (parameter
+        (var_modifier)
+        (identifier)
+        (borrowed_type
+          (type_identifier)))
+      (parameter
+        (identifier)
+        (primitive_type)))
+    (block_statement
+      (return_statement))))
+
+================================================================================
 Assignment statements
 ================================================================================
 
