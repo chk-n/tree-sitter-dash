@@ -422,3 +422,124 @@ let fn3 = fn(x, y i64) i64, i64 {
           (return_statement
             (int_literal)
             (int_literal)))))))
+
+================================================================================
+Struct literals - named struct with spread/update field
+================================================================================
+
+lib main
+
+let s = abc{..s, a: x, b: none}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (identifier)
+        (struct_spread_field
+          (identifier))
+        (struct_named_field
+          (identifier)
+          (identifier))
+        (struct_named_field
+          (identifier)
+          (none))))))
+
+================================================================================
+Struct literals - anonymous struct with spread/update field
+================================================================================
+
+lib main
+
+let x = {..base, a: 1}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (struct_spread_field
+          (identifier))
+        (struct_named_field
+          (identifier)
+          (int_literal))))))
+
+================================================================================
+Struct literals - qualified (dotted) type name
+================================================================================
+
+lib main
+
+let x = m.n{a: 1}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (struct_literal
+        (dot_expression
+          (identifier)
+          (identifier))
+        (struct_named_field
+          (identifier)
+          (int_literal))))))
+
+================================================================================
+Struct literals - qualified type name in multi-value return
+================================================================================
+
+lib main
+
+fn f()! i32 {
+  return *m.n{a: x.y, b: x.z}, x.w
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (error_prone)
+    (primitive_type)
+    (block_statement
+      (return_statement
+        (prefix_expression
+          (struct_literal
+            (dot_expression
+              (identifier)
+              (identifier))
+            (struct_named_field
+              (identifier)
+              (dot_expression
+                (identifier)
+                (identifier)))
+            (struct_named_field
+              (identifier)
+              (dot_expression
+                (identifier)
+                (identifier)))))
+        (dot_expression
+          (identifier)
+          (identifier))))))

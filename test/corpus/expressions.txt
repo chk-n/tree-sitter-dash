@@ -294,34 +294,6 @@ let ge2 = (!func()) || false
         (false)))))
 
 ================================================================================
-Use expressions
-================================================================================
-
-lib main
-
-let ue = use x {
-  x = 1
-}
---------------------------------------------------------------------------------
-
-(source_file
-  (library_statement
-    (identifier))
-  (assignment_statement
-    (decleration_list
-      (let_statement
-        (identifier)))
-    (assignable_expression_list
-      (use_expression
-        (identifier)
-        (block_statement
-          (assignment_statement
-            (decleration_list
-              (identifier))
-            (assignable_expression_list
-              (int_literal))))))))
-
-================================================================================
 Copy expressions
 ================================================================================
 
@@ -475,6 +447,33 @@ let me2 = match v {
             (identifier)))))))
 
 ================================================================================
+Match expression with scrutinee binding
+================================================================================
+
+lib main
+
+let is_value = match e = existing { case 1: true case _: false }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (match_expression
+        (identifier)
+        (identifier)
+        (match_expression_case
+          (int_literal)
+          (true))
+        (match_expression_default
+          (false))))))
+
+================================================================================
 Dot expressions
 ================================================================================
 
@@ -568,3 +567,497 @@ let gfc = call[u64, i32]()
         (type_arguments
           (primitive_type)
           (primitive_type))))))
+
+================================================================================
+Qualified and method calls
+================================================================================
+
+lib t
+fn f()! i32 {
+    a = foo.bar(x.y, z)
+    b = baz.qux[m.n, p]()
+    c = x.y.z(w)
+    d = call(p, q)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (dot_expression
+              operand: (identifier)
+              field: (identifier))
+            arguments: (dot_expression
+              operand: (identifier)
+              field: (identifier))
+            arguments: (identifier))))
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (dot_expression
+              operand: (identifier)
+              field: (identifier))
+            type_arguments: (type_arguments
+              (dot_type
+                left: (identifier)
+                right: (type_identifier))
+              (type_identifier)))))
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (dot_expression
+              operand: (dot_expression
+                operand: (identifier)
+                field: (identifier))
+              field: (identifier))
+            arguments: (identifier))))
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (identifier)
+            arguments: (identifier)
+            arguments: (identifier)))))))
+
+================================================================================
+Qualified call in defer, with method call and plain dot
+================================================================================
+
+lib t
+fn f()! i32 {
+    defer a.b()
+    defer { call() }
+    x = a.b
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (defer_statement
+        (call_expression
+          name: (dot_expression
+            operand: (identifier)
+            field: (identifier))))
+      (defer_statement
+        (block_statement
+          (expression_statement
+            (call_expression
+              name: (identifier)))))
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (dot_expression
+            operand: (identifier)
+            field: (identifier)))))))
+
+================================================================================
+Try expression on assignment RHS
+================================================================================
+
+lib t
+
+fn f()! i32 {
+  let x = try call(a, b)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (assignment_statement
+        left: (decleration_list
+          (let_statement
+            (identifier)))
+        right: (assignable_expression_list
+          (try_expression
+            expression: (call_expression
+              name: (identifier)
+              arguments: (identifier)
+              arguments: (identifier))))))))
+
+================================================================================
+Try expression as return value
+================================================================================
+
+lib t
+
+fn f()! i32 {
+  return try call(a, b)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (return_statement
+        (try_expression
+          expression: (call_expression
+            name: (identifier)
+            arguments: (identifier)
+            arguments: (identifier)))))))
+
+================================================================================
+Try expression as call argument
+================================================================================
+
+lib t
+
+fn f()! i32 {
+  r = call(try g(x))
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (identifier)
+            arguments: (try_expression
+              expression: (call_expression
+                name: (identifier)
+                arguments: (identifier)))))))))
+
+================================================================================
+Match expression with multi-value case
+================================================================================
+
+lib main
+
+let t = match x {
+  case 1, 2, 3:
+    y
+  case _:
+    z
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (match_expression
+        (identifier)
+        (match_expression_case
+          (int_literal)
+          (int_literal)
+          (int_literal)
+          (identifier))
+        (match_expression_default
+          (identifier))))))
+
+================================================================================
+Optional-unwrap prefix expressions
+================================================================================
+
+lib main
+
+let a = ?b
+let c = f(?d)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (prefix_expression
+        (identifier))))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (call_expression
+        (identifier)
+        (prefix_expression
+          (identifier))))))
+
+================================================================================
+Match expression with diverging (raise) default arm
+================================================================================
+
+lib main
+
+let t = match x {
+  case a:
+    p.q
+  case _:
+    raise err{msg: "bad", pos: i}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (match_expression
+        (identifier)
+        (match_expression_case
+          (identifier)
+          (dot_expression
+            (identifier)
+            (identifier)))
+        (match_expression_default
+          (raise_statement
+            (struct_literal
+              (identifier)
+              (struct_named_field
+                (identifier)
+                (string_literal))
+              (struct_named_field
+                (identifier)
+                (identifier)))))))))
+
+================================================================================
+If expression with diverging (return) branch
+================================================================================
+
+lib main
+
+let o = if c {
+  return s
+} else {
+  a.b(0)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (if_expression
+        (identifier)
+        (return_statement
+          (identifier))
+        (call_expression
+          (dot_expression
+            (identifier)
+            (identifier))
+          (int_literal))))))
+
+================================================================================
+Catch expression - binding form on assignment RHS
+================================================================================
+
+lib main
+
+let i = f(s, 10) catch e {
+  x = try g(s, err{pos: p})
+  return s, 0, false
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (catch_statement
+        (call_expression
+          (identifier)
+          (identifier)
+          (int_literal))
+        (identifier)
+        (block_statement
+          (assignment_statement
+            (decleration_list
+              (identifier))
+            (assignable_expression_list
+              (try_expression
+                (call_expression
+                  (identifier)
+                  (identifier)
+                  (struct_literal
+                    (identifier)
+                    (struct_named_field
+                      (identifier)
+                      (identifier)))))))
+          (return_statement
+            (identifier)
+            (int_literal)
+            (false)))))))
+
+================================================================================
+Catch expression - binding form with qualified callee
+================================================================================
+
+lib main
+
+let i = a.f(b, 10) catch e {
+  return s
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (assignment_statement
+    (decleration_list
+      (let_statement
+        (identifier)))
+    (assignable_expression_list
+      (catch_statement
+        (call_expression
+          (dot_expression
+            (identifier)
+            (identifier))
+          (identifier)
+          (int_literal))
+        (identifier)
+        (block_statement
+          (return_statement
+            (identifier)))))))
+
+================================================================================
+Array-type conversion call as RHS
+================================================================================
+
+lib t
+fn f()! i32 {
+  x = []u32(a)
+  y = []m.n(b)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (array_type
+              (primitive_type))
+            arguments: (identifier))))
+      (assignment_statement
+        left: (decleration_list
+          (identifier))
+        right: (assignable_expression_list
+          (call_expression
+            name: (array_type
+              (dot_type
+                left: (identifier)
+                right: (type_identifier)))
+            arguments: (identifier)))))))
+
+================================================================================
+Array-type conversion call nested as a call argument
+================================================================================
+
+lib t
+fn f()! i32 {
+  x.y = foo.bar(x.y, z, []u32(a))
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    name: (identifier)
+    parameters: (parameter_list)
+    error_prone: (error_prone)
+    result: (primitive_type)
+    body: (block_statement
+      (assignment_statement
+        left: (decleration_list
+          (dot_expression
+            operand: (identifier)
+            field: (identifier)))
+        right: (assignable_expression_list
+          (call_expression
+            name: (dot_expression
+              operand: (identifier)
+              field: (identifier))
+            arguments: (dot_expression
+              operand: (identifier)
+              field: (identifier))
+            arguments: (identifier)
+            arguments: (call_expression
+              name: (array_type
+                (primitive_type))
+              arguments: (identifier))))))))

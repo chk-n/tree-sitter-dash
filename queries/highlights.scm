@@ -141,7 +141,7 @@
 ] @constant.builtin.boolean
 
 [
-  (null)
+  (none)
 ] @constant.builtin
 
 

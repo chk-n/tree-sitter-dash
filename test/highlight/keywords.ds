@@ -1,6 +1,9 @@
 lib main
 //<-keyword.control.import
 
+use "dash/ast"
+//<-keyword
+
 type abc i64
 //<-keyword
 alias abc i64
@@ -57,6 +60,3 @@ pub fn main() {
 //  ^keyword.control.return
     
 }
-
-let x = use y {}
-//      ^keyword

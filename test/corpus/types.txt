@@ -209,3 +209,119 @@ union abc {
       (type_identifier)
       (array_type
         (type_identifier)))))
+
+================================================================================
+Generic type - pointer to dotted generic field
+================================================================================
+
+lib main
+
+struct s {
+  a *m.n[p.q, r]
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (struct_statement
+    (identifier)
+    (struct_body
+      (field_statement
+        (identifier)
+        (pointer_type
+          (generic_type
+            (dot_type
+              (identifier)
+              (type_identifier))
+            (type_arguments
+              (dot_type
+                (identifier)
+                (type_identifier))
+              (type_identifier))))))))
+
+================================================================================
+Generic type - array of generic field
+================================================================================
+
+lib main
+
+type a []xyz[u8]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (array_type
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (primitive_type))))))
+
+================================================================================
+Generic type - alias and type with generic instantiation
+================================================================================
+
+lib main
+
+alias k m.n[u64, u32]
+type t xyz[u8]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_alias_statement
+    (identifier)
+    (generic_type
+      (dot_type
+        (identifier)
+        (type_identifier))
+      (type_arguments
+        (primitive_type)
+        (primitive_type))))
+  (type_statement
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (primitive_type)))))
+
+================================================================================
+Public type statement
+================================================================================
+
+lib main
+
+pub type abc u32
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_statement
+    (identifier)
+    (primitive_type)))
+
+================================================================================
+Public type alias statement
+================================================================================
+
+lib main
+
+pub alias foo bar
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (type_alias_statement
+    (identifier)
+    (type_identifier)))

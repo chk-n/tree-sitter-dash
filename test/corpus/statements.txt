@@ -123,15 +123,42 @@ enum abc {
   (enum_statement
     (identifier)
 	(enum_body
-    	(field_statement
-            (type_identifier)))) 
+    	(enum_variant
+            (identifier))))
   (enum_statement
     (identifier)
     (enum_body
-      (field_statement
-            (type_identifier))
-          (field_statement
-            (type_identifier)))))
+      (enum_variant
+            (identifier))
+          (enum_variant
+            (identifier)))))
+
+================================================================================
+Pub enum with multiple variants
+================================================================================
+
+lib main
+
+pub enum mode {
+	debug
+	release
+	test
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (enum_statement
+    (identifier)
+    (enum_body
+      (enum_variant
+        (identifier))
+      (enum_variant
+        (identifier))
+      (enum_variant
+        (identifier)))))
 
 ================================================================================
 Function statements
@@ -538,6 +565,40 @@ fn main() {
             (return_statement))))))
 
 ================================================================================
+Match statement with scrutinee binding
+================================================================================
+
+lib main
+
+fn main() {
+	match m = a.b {
+	case 1: next
+	case _:
+		return
+	}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (match_statement
+        (identifier)
+        (dot_expression
+          (identifier)
+          (identifier))
+        (match_statement_case
+          (int_literal)
+          (next_keyword))
+        (match_statement_default
+          (return_statement))))))
+
+================================================================================
 Block statements
 ================================================================================
 
@@ -665,9 +726,10 @@ fn main() {
     (identifier)
     (parameter_list)
     (block_statement
-      (try_statement
-        (call_expression
-          (identifier))))))
+      (expression_statement
+        (try_expression
+          (call_expression
+            (identifier)))))))
 
 ================================================================================
 Catch statements
@@ -879,3 +941,174 @@ fn test[T, E any](value T, err E) T, E {
         (identifier)
         (identifier)))))
 
+
+================================================================================
+Declaration list with three targets
+================================================================================
+
+lib main
+
+fn f()! i32 {
+  a, let b, let _ = call(a, x, y)
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (error_prone)
+    (primitive_type)
+    (block_statement
+      (assignment_statement
+        (decleration_list
+          (identifier)
+          (let_statement
+            (identifier))
+          (let_statement
+            (identifier)))
+        (assignable_expression_list
+          (call_expression
+            (identifier)
+            (identifier)
+            (identifier)
+            (identifier)))))))
+
+================================================================================
+Return statement with four values
+================================================================================
+
+lib main
+
+fn f()! i32 {
+  return a, b, c, d
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (error_prone)
+    (primitive_type)
+    (block_statement
+      (return_statement
+        (identifier)
+        (identifier)
+        (identifier)
+        (identifier)))))
+
+================================================================================
+Assignment with three-value right-hand side
+================================================================================
+
+lib main
+
+fn f()! i32 {
+  a, b, c = x, y, z
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (error_prone)
+    (primitive_type)
+    (block_statement
+      (assignment_statement
+        (decleration_list
+          (identifier)
+          (identifier)
+          (identifier))
+        (assignable_expression_list
+          (identifier)
+          (identifier)
+          (identifier))))))
+
+================================================================================
+Match statement with multi-value case
+================================================================================
+
+lib main
+
+fn main() {
+	match a.b {
+	case x.y.p, x.y.q, x.y.r:
+		next
+	case _:
+		next
+	}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (function_statement
+    (identifier)
+    (parameter_list)
+    (block_statement
+      (match_statement
+        (dot_expression
+          (identifier)
+          (identifier))
+        (match_statement_case
+          (dot_expression
+            (dot_expression
+              (identifier)
+              (identifier))
+            (identifier))
+          (dot_expression
+            (dot_expression
+              (identifier)
+              (identifier))
+            (identifier))
+          (dot_expression
+            (dot_expression
+              (identifier)
+              (identifier))
+            (identifier))
+          (next_keyword))
+        (match_statement_default
+          (next_keyword))))))
+
+================================================================================
+Import statements
+================================================================================
+
+lib main
+
+use "foo"
+use "foo/bar"
+use "foo/bar/baz"
+
+struct s { a u32 }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (library_statement
+    (identifier))
+  (import_statement
+    path: (string_literal))
+  (import_statement
+    path: (string_literal))
+  (import_statement
+    path: (string_literal))
+  (struct_statement
+    name: (identifier)
+    body: (struct_body
+      (field_statement
+        name: (identifier)
+        type: (primitive_type)))))
