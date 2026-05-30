@@ -95,12 +95,15 @@
 ] @keyword.storage.type
 
 [
-  "defer"
   "try"
-  "catch" 
+  "catch"
   "raise"
+] @keyword.control.exception
+
+[
+  "defer"
   ; "goto"
-] @function.macro
+] @keyword.control
 
 ; Delimiters
 
